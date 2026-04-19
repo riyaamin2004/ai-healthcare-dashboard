@@ -1,37 +1,67 @@
 import streamlit as st
+import random
 
-st.set_page_config(page_title="AI Healthcare Dashboard")
+st.set_page_config(page_title="AI Healthcare Dashboard", layout="wide")
 
-st.title("🧠 AI Healthcare Dashboard")
+# -------- SIDEBAR --------
+st.sidebar.title("🧠 AI Healthcare System")
+page = st.sidebar.radio("Navigate", ["Dashboard", "Predict Disease"])
 
-st.metric("Total Patients Checked", "120")
-st.metric("Common Disease", "Flu")
-st.metric("System Accuracy", "85%")
+# -------- DASHBOARD PAGE --------
+if page == "Dashboard":
+    st.title("📊 Healthcare Analytics Dashboard")
 
-st.write("### Enter Symptoms")
+    col1, col2, col3 = st.columns(3)
 
-fever = st.selectbox("Fever", ["No", "Yes"])
-headache = st.selectbox("Headache", ["No", "Yes"])
-fatigue = st.selectbox("Fatigue", ["No", "Yes"])
-cough = st.selectbox("Cough", ["No", "Yes"])
+    col1.metric("Total Patients", "128")
+    col2.metric("Common Disease", "Flu")
+    col3.metric("System Accuracy", "87%")
 
-if st.button("Predict"):
+    st.subheader("Disease Distribution")
 
-    if fever == "Yes" and headache == "Yes" and fatigue == "Yes":
-        disease = "Flu"
-        advice = "Take rest and drink fluids"
+    st.bar_chart({
+        "Flu": [12],
+        "Cold": [19],
+        "Allergy": [7],
+        "Migraine": [10]
+    })
 
-    elif fever == "Yes" and cough == "Yes":
-        disease = "Cold"
-        advice = "Stay warm and hydrated"
+# -------- PREDICTION PAGE --------
+elif page == "Predict Disease":
+    st.title("🧪 Disease Prediction")
 
-    elif headache == "Yes" and fatigue == "Yes":
-        disease = "Migraine / Stress"
-        advice = "Take rest and reduce screen time"
+    col1, col2 = st.columns(2)
 
-    else:
-        disease = "No major illness"
-        advice = "Stay healthy"
+    with col1:
+        fever = st.selectbox("Fever", ["No", "Yes"])
+        headache = st.selectbox("Headache", ["No", "Yes"])
 
-    st.success(f"Prediction: {disease}")
-    st.info(f"Advice: {advice}")
+    with col2:
+        fatigue = st.selectbox("Fatigue", ["No", "Yes"])
+        cough = st.selectbox("Cough", ["No", "Yes"])
+
+    if st.button("Predict"):
+
+        confidence = random.randint(80, 95)
+
+        if fever == "Yes" and headache == "Yes" and fatigue == "Yes":
+            disease = "Flu"
+            advice = "Take rest, drink fluids, consult doctor if needed"
+
+        elif fever == "Yes" and cough == "Yes":
+            disease = "Cold"
+            advice = "Stay warm, drink hot fluids"
+
+        elif headache == "Yes" and fatigue == "Yes":
+            disease = "Migraine / Stress"
+            advice = "Take rest, reduce screen exposure"
+
+        else:
+            disease = "No major illness"
+            advice = "Maintain healthy lifestyle"
+
+        st.success(f"🩺 Prediction: {disease}")
+        st.info(f"💊 Advice: {advice}")
+        st.warning(f"📈 Confidence Level: {confidence}%")
+
+        st.progress(confidence / 100)
