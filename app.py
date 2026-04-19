@@ -1,34 +1,43 @@
 import streamlit as st
 import random
 
-st.set_page_config(page_title="AI Healthcare Dashboard", layout="wide")
+st.set_page_config(page_title="MediCore AI", layout="wide")
 
 # -------- SIDEBAR --------
-st.sidebar.title("🧠 AI Healthcare System")
-page = st.sidebar.radio("Navigate", ["Dashboard", "Predict Disease"])
+st.sidebar.markdown("## 🏥 MediCore.AI")
+st.sidebar.caption("Healthcare OS")
 
-# -------- DASHBOARD PAGE --------
-if page == "Dashboard":
-    st.title("📊 Healthcare Analytics Dashboard")
+menu = st.sidebar.radio(
+    "Modules",
+    ["Dashboard", "Symptom Checker", "AI Chatbot", "Report Analyzer", "Patient Records"]
+)
+
+# -------- DASHBOARD --------
+if menu == "Dashboard":
+    st.title("📊 MediCore AI Dashboard")
+    st.markdown("### AI-assisted healthcare system")
 
     col1, col2, col3 = st.columns(3)
 
-    col1.metric("Total Patients", "128")
+    col1.metric("Patients", "120")
     col2.metric("Common Disease", "Flu")
-    col3.metric("System Accuracy", "87%")
+    col3.metric("Accuracy", "87%")
 
-    st.subheader("Disease Distribution")
+    st.markdown("---")
+    st.subheader("System Overview")
+
+    st.write("This system simulates AI-based healthcare using rule-based logic.")
 
     st.bar_chart({
         "Flu": [12],
         "Cold": [19],
         "Allergy": [7],
-        "Migraine": [10]
+        "Stress": [10]
     })
 
-# -------- PREDICTION PAGE --------
-elif page == "Predict Disease":
-    st.title("🧪 Disease Prediction")
+# -------- SYMPTOM CHECKER --------
+elif menu == "Symptom Checker":
+    st.title("🧪 Symptom Checker")
 
     col1, col2 = st.columns(2)
 
@@ -40,28 +49,52 @@ elif page == "Predict Disease":
         fatigue = st.selectbox("Fatigue", ["No", "Yes"])
         cough = st.selectbox("Cough", ["No", "Yes"])
 
-    if st.button("Predict"):
-
+    if st.button("Analyze Symptoms"):
         confidence = random.randint(80, 95)
 
-        if fever == "Yes" and headache == "Yes" and fatigue == "Yes":
+        if fever == "Yes" and headache == "Yes":
             disease = "Flu"
-            advice = "Take rest, drink fluids, consult doctor if needed"
+            advice = "Take rest and drink fluids"
 
         elif fever == "Yes" and cough == "Yes":
             disease = "Cold"
-            advice = "Stay warm, drink hot fluids"
-
-        elif headache == "Yes" and fatigue == "Yes":
-            disease = "Migraine / Stress"
-            advice = "Take rest, reduce screen exposure"
+            advice = "Stay warm and hydrated"
 
         else:
             disease = "No major illness"
-            advice = "Maintain healthy lifestyle"
+            advice = "Stay healthy"
 
-        st.success(f"🩺 Prediction: {disease}")
-        st.info(f"💊 Advice: {advice}")
-        st.warning(f"📈 Confidence Level: {confidence}%")
+        st.success(f"Diagnosis: {disease}")
+        st.info(f"Advice: {advice}")
+        st.warning(f"Confidence: {confidence}%")
 
-        st.progress(confidence / 100)
+# -------- AI CHATBOT --------
+elif menu == "AI Chatbot":
+    st.title("🤖 AI Chatbot")
+
+    user_input = st.text_input("Ask a health question:")
+
+    if user_input:
+        st.write("AI Response:")
+        st.success("Based on your query, please consult a doctor for accurate diagnosis.")
+
+# -------- REPORT ANALYZER --------
+elif menu == "Report Analyzer":
+    st.title("📄 Report Analyzer")
+
+    file = st.file_uploader("Upload medical report")
+
+    if file:
+        st.success("Report uploaded successfully!")
+        st.info("Basic analysis: No critical issues detected.")
+
+# -------- PATIENT RECORDS --------
+elif menu == "Patient Records":
+    st.title("👨‍⚕️ Patient Records")
+
+    st.write("Sample Records:")
+    st.table({
+        "Name": ["Riya", "Aman"],
+        "Disease": ["Flu", "Cold"],
+        "Status": ["Recovering", "Stable"]
+    })
