@@ -3,6 +3,38 @@ import random
 
 st.set_page_config(page_title="MediCore AI", layout="wide")
 
+# -------- CUSTOM CSS (MAGIC PART) --------
+st.markdown("""
+<style>
+body {
+    background-color: #0f172a;
+    color: white;
+}
+
+[data-testid="stSidebar"] {
+    background-color: #020617;
+}
+
+.card {
+    padding: 20px;
+    border-radius: 15px;
+    background: #1e293b;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.4);
+    margin-bottom: 20px;
+}
+
+.title {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.sub {
+    color: #94a3b8;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
 # -------- SIDEBAR --------
 st.sidebar.markdown("## 🏥 MediCore.AI")
 st.sidebar.caption("Healthcare OS")
@@ -14,20 +46,21 @@ menu = st.sidebar.radio(
 
 # -------- DASHBOARD --------
 if menu == "Dashboard":
-    st.title("📊 MediCore AI Dashboard")
-    st.markdown("### AI-assisted healthcare system")
+    st.markdown('<div class="title">📊 Dashboard</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub">AI-assisted healthcare system</div>', unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns(3)
 
-    col1.metric("Patients", "120")
-    col2.metric("Common Disease", "Flu")
-    col3.metric("Accuracy", "87%")
+    with col1:
+        st.markdown('<div class="card">👥 Patients<br><h2>128</h2></div>', unsafe_allow_html=True)
 
-    st.markdown("---")
-    st.subheader("System Overview")
+    with col2:
+        st.markdown('<div class="card">🦠 Common Disease<br><h2>Flu</h2></div>', unsafe_allow_html=True)
 
-    st.write("This system simulates AI-based healthcare using rule-based logic.")
+    with col3:
+        st.markdown('<div class="card">📈 Accuracy<br><h2>87%</h2></div>', unsafe_allow_html=True)
 
+    st.markdown("### 📊 Disease Distribution")
     st.bar_chart({
         "Flu": [12],
         "Cold": [19],
@@ -37,7 +70,7 @@ if menu == "Dashboard":
 
 # -------- SYMPTOM CHECKER --------
 elif menu == "Symptom Checker":
-    st.title("🧪 Symptom Checker")
+    st.markdown('<div class="title">🧪 Symptom Checker</div>', unsafe_allow_html=True)
 
     col1, col2 = st.columns(2)
 
@@ -52,7 +85,7 @@ elif menu == "Symptom Checker":
     if st.button("Analyze Symptoms"):
         confidence = random.randint(80, 95)
 
-        if fever == "Yes" and headache == "Yes":
+        if fever == "Yes" and headache == "Yes" and fatigue == "Yes":
             disease = "Flu"
             advice = "Take rest and drink fluids"
 
@@ -60,27 +93,30 @@ elif menu == "Symptom Checker":
             disease = "Cold"
             advice = "Stay warm and hydrated"
 
+        elif headache == "Yes" and fatigue == "Yes":
+            disease = "Migraine / Stress"
+            advice = "Take rest, reduce screen time"
+
         else:
             disease = "No major illness"
-            advice = "Stay healthy"
+            advice = "Maintain healthy lifestyle"
 
-        st.success(f"Diagnosis: {disease}")
-        st.info(f"Advice: {advice}")
-        st.warning(f"Confidence: {confidence}%")
+        st.success(f"🩺 Diagnosis: {disease}")
+        st.info(f"💊 Advice: {advice}")
+        st.warning(f"📊 Confidence: {confidence}%")
 
 # -------- AI CHATBOT --------
 elif menu == "AI Chatbot":
-    st.title("🤖 AI Chatbot")
+    st.markdown('<div class="title">🤖 AI Chatbot</div>', unsafe_allow_html=True)
 
     user_input = st.text_input("Ask a health question:")
 
     if user_input:
-        st.write("AI Response:")
-        st.success("Based on your query, please consult a doctor for accurate diagnosis.")
+        st.markdown('<div class="card">AI Response:<br>Consult a doctor for accurate diagnosis.</div>', unsafe_allow_html=True)
 
 # -------- REPORT ANALYZER --------
 elif menu == "Report Analyzer":
-    st.title("📄 Report Analyzer")
+    st.markdown('<div class="title">📄 Report Analyzer</div>', unsafe_allow_html=True)
 
     file = st.file_uploader("Upload medical report")
 
@@ -90,9 +126,8 @@ elif menu == "Report Analyzer":
 
 # -------- PATIENT RECORDS --------
 elif menu == "Patient Records":
-    st.title("👨‍⚕️ Patient Records")
+    st.markdown('<div class="title">👨‍⚕️ Patient Records</div>', unsafe_allow_html=True)
 
-    st.write("Sample Records:")
     st.table({
         "Name": ["Riya", "Aman"],
         "Disease": ["Flu", "Cold"],
